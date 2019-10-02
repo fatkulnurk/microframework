@@ -1,0 +1,22 @@
+{
+    "name": "fatkulnurk/microframework",
+    "description": "php microframework",
+    "type": "project",
+    "authors": [
+        {
+            "name": "fatkulnurk",
+            "email": "fatkulnurk@gmail.com"
+        }
+    ],
+    "autoload": {
+        "classmap": ["system/"]
+    },
+    "require": {
+        "php": "^7.2",
+        "twig/twig":"^2.0",
+        "pyrocms/lex": "2.2.*"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.*"
+    }
+}
