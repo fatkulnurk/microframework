@@ -8,18 +8,10 @@ use Mifa\Routing\Dispatcher;
 
 abstract class RegexBasedAbstract implements Dispatcher
 {
-    /**
-     * 
-     *
-     * @var mixed[][] 
-     */
+    /** @var mixed[][] */
     protected $staticRouteMap = [];
 
-    /**
-     * 
-     *
-     * @var mixed[] 
-     */
+    /** @var mixed[] */
     protected $variableRouteData = [];
 
     /**
