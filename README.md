@@ -9,8 +9,16 @@ PHP Microframework
 
 Baca dokumentasi selengkapnya [link belum ada].
 
+---
+**Cek CodeStyle**
 
+Standard yang digunakan adalah PSR2, untuk menjalankan ketikan command berikut.
 
+``
+phpcs ./system --standard=psr2
+``
+
+---
 **Tool**
 - PHP_CodeSniffer (phpcs & phpcbf), 
 cara integrasi dengan phpstorm --> https://www.jetbrains.com/help/phpstorm/using-php-code-sniffer.html
