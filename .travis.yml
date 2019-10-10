@@ -3,9 +3,30 @@ language: php
 php:
   - 7.2
 
-before_script:
-  - travis_retry composer self-update
-  - travis_retry composer install --prefer-source --no-interaction
+before_install:
+  - export CI_BUILD_NUMBER="$TRAVIS_BUILD_NUMBER"
+  - export CI_PULL_REQUEST="$TRAVIS_PULL_REQUEST"
+  - export CI_BRANCH="$TRAVIS_BRANCH"
+  - composer require php-coveralls/php-coveralls '^2.*'
+  - git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git /tmp/phpcs
+  - git clone -b master https://github.com/gamcoh/Gamzer-PHP-Standard.git /tmp/Gamzer-PHP-Standard
+  - /tmp/phpcs/bin/phpcs --config-set installed_paths /tmp/Gamzer-PHP-Standard/
 
-script:
-  - ./vendor/bin/phpcs ./system
+install:
+  - composer install
+
+before_script:
+#  - travis_retry composer self-update
+#  - travis_retry composer install --prefer-source --no-interaction
+  - mkdir -p tests/logs
+
+  - ./vendor/bin/phpunit -c ./ --coverage-text --coverage-clover tests/logs/clover.xml
+    - /tmp/phpcs/bin/phpcs . --standard=./phpcs.xml
+    - jshint test.js
+    - npm run test --coverage
+
+after_script:
+  - php ./vendor/bin/php-coveralls -v
+
+matrix:
+  fast_finish: true
