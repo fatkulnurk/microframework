@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing\DataGenerator;
@@ -8,7 +9,7 @@ use function implode;
 class MarkBased extends RegexBasedAbstract
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getApproxChunkSize(): int
     {
@@ -16,7 +17,7 @@ class MarkBased extends RegexBasedAbstract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function processChunk(array $regexToRoutesMap): array
     {
@@ -25,13 +26,13 @@ class MarkBased extends RegexBasedAbstract
         $markName = 'a';
 
         foreach ($regexToRoutesMap as $regex => $route) {
-            $regexes[] = $regex . '(*MARK:' . $markName . ')';
+            $regexes[] = $regex.'(*MARK:'.$markName.')';
             $routeMap[$markName] = [$route->handler, $route->variables];
 
-            ++$markName;
+            $markName++;
         }
 
-        $regex = '~^(?|' . implode('|', $regexes) . ')$~';
+        $regex = '~^(?|'.implode('|', $regexes).')$~';
 
         return ['regex' => $regex, 'routeMap' => $routeMap];
     }

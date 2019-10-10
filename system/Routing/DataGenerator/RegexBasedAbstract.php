@@ -1,22 +1,23 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing\DataGenerator;
 
-use Mifa\Routing\BadRouteException;
-use Mifa\Routing\DataGenerator;
-use Mifa\Routing\Route;
-use function array_chunk;
-use function array_map;
+use function max;
 use function ceil;
 use function count;
+use function round;
+use function strpos;
+use function sprintf;
+use function array_map;
 use function is_string;
-use function max;
+use Mifa\Routing\Route;
 use function preg_match;
 use function preg_quote;
-use function round;
-use function sprintf;
-use function strpos;
+use function array_chunk;
+use Mifa\Routing\DataGenerator;
+use Mifa\Routing\BadRouteException;
 
 abstract class RegexBasedAbstract implements DataGenerator
 {
@@ -36,7 +37,7 @@ abstract class RegexBasedAbstract implements DataGenerator
     abstract protected function processChunk(array $regexToRoutesMap): array;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addRoute(string $httpMethod, array $routeData, $handler): void
     {
@@ -48,7 +49,7 @@ abstract class RegexBasedAbstract implements DataGenerator
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getData(): array
     {
@@ -178,7 +179,7 @@ abstract class RegexBasedAbstract implements DataGenerator
             }
 
             $variables[$varName] = $varName;
-            $regex .= '(' . $regexPart . ')';
+            $regex .= '('.$regexPart.')';
         }
 
         return [$regex, $variables];

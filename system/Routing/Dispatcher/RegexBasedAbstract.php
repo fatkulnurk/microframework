@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing\Dispatcher;
@@ -29,7 +30,7 @@ abstract class RegexBasedAbstract implements Dispatcher
     abstract protected function dispatchVariableRoute(array $routeData, string $uri): array;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function dispatch(string $httpMethod, string $uri): array
     {

@@ -1,23 +1,24 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing\RouteParser;
 
-use Mifa\Routing\BadRouteException;
-use Mifa\Routing\RouteParser;
-use const PREG_OFFSET_CAPTURE;
-use const PREG_SET_ORDER;
+use function trim;
 use function count;
-use function preg_match;
-use function preg_match_all;
-use function preg_split;
 use function rtrim;
 use function strlen;
 use function substr;
-use function trim;
+use function preg_match;
+use function preg_split;
+use const PREG_SET_ORDER;
+use function preg_match_all;
+use Mifa\Routing\RouteParser;
+use const PREG_OFFSET_CAPTURE;
+use Mifa\Routing\BadRouteException;
 
 /**
- * Parses route strings of the following form:
+ * Parses route strings of the following form:.
  *
  * "/user/{name}[/{id:[0-9]+}]"
  */
@@ -35,7 +36,7 @@ REGEX;
     public const DEFAULT_DISPATCH_REGEX = '[^/]+';
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function parse(string $route): array
     {
@@ -43,11 +44,11 @@ REGEX;
         $numOptionals = strlen($route) - strlen($routeWithoutClosingOptionals);
 
         // Split on [ while skipping placeholders
-        $segments = preg_split('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
+        $segments = preg_split('~'.self::VARIABLE_REGEX.'(*SKIP)(*F) | \[~x', $routeWithoutClosingOptionals);
 
         if ($numOptionals !== count($segments) - 1) {
             // If there are any ] in the middle of the route, throw a more specific error message
-            if (preg_match('~' . self::VARIABLE_REGEX . '(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {
+            if (preg_match('~'.self::VARIABLE_REGEX.'(*SKIP)(*F) | \]~x', $routeWithoutClosingOptionals)) {
                 throw new BadRouteException('Optional segments can only occur at the end of a route');
             }
 
@@ -76,7 +77,7 @@ REGEX;
      */
     private function parsePlaceholders(string $route): array
     {
-        if (! preg_match_all('~' . self::VARIABLE_REGEX . '~x', $route, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
+        if (! preg_match_all('~'.self::VARIABLE_REGEX.'~x', $route, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
             return [$route];
         }
 
