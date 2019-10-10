@@ -15,17 +15,21 @@ before_install:
 install:
   - composer install
 
-before_script:
+#before_script:
 #  - travis_retry composer self-update
 #  - travis_retry composer install --prefer-source --no-interaction
 #  - mkdir -p tests/logs
 #
-#  - ./vendor/bin/phpunit -c ./ --coverage-text --coverage-clover tests/logs/clover.xml
-    - /tmp/phpcs/bin/phpcs --config-set colors 1
-    - /tmp/phpcs/bin/phpcs ./system --standard=psr2
+##  - ./vendor/bin/phpunit -c ./ --coverage-text --coverage-clover tests/logs/clover.xml
+#    - /tmp/phpcs/bin/phpcs --config-set colors 1
+#    - /tmp/phpcs/bin/phpcs ./system --standard=psr2
 #    - /tmp/phpcs/bin/phpcs . --standard=./phpcs.xml
 
-after_script:
+script:
+  - /tmp/phpcs/bin/phpcs --config-set colors 1
+  - /tmp/phpcs/bin/phpcs ./system --standard=psr2
+
+#after_script:
 #  - php ./vendor/bin/php-coveralls -v
 
 #matrix:
