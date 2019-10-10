@@ -9,8 +9,8 @@ before_install:
   - export CI_BRANCH="$TRAVIS_BRANCH"
   - composer require php-coveralls/php-coveralls '^2.1'
   - git clone -b master --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git /tmp/phpcs
-  - git clone -b master https://github.com/gamcoh/Gamzer-PHP-Standard.git /tmp/Gamzer-PHP-Standard
-  - /tmp/phpcs/bin/phpcs --config-set installed_paths /tmp/Gamzer-PHP-Standard/
+#  - git clone -b master https://github.com/gamcoh/Gamzer-PHP-Standard.git /tmp/Gamzer-PHP-Standard
+#  - /tmp/phpcs/bin/phpcs --config-set installed_paths /tmp/Gamzer-PHP-Standard/
 
 install:
   - composer install
@@ -21,11 +21,12 @@ before_script:
 #  - mkdir -p tests/logs
 #
 #  - ./vendor/bin/phpunit -c ./ --coverage-text --coverage-clover tests/logs/clover.xml
+    - /tmp/phpcs/bin/phpcs --config-set colors 1
     - /tmp/phpcs/bin/phpcs ./system --standard=psr2
 #    - /tmp/phpcs/bin/phpcs . --standard=./phpcs.xml
 
-after_script:
-  - php ./vendor/bin/php-coveralls -v
+#after_script:
+#  - php ./vendor/bin/php-coveralls -v
 
 matrix:
   fast_finish: true
