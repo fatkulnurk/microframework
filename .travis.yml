@@ -18,12 +18,10 @@ install:
 before_script:
 #  - travis_retry composer self-update
 #  - travis_retry composer install --prefer-source --no-interaction
-  - mkdir -p tests/logs
-
-  - ./vendor/bin/phpunit -c ./ --coverage-text --coverage-clover tests/logs/clover.xml
+#  - mkdir -p tests/logs
+#
+#  - ./vendor/bin/phpunit -c ./ --coverage-text --coverage-clover tests/logs/clover.xml
     - /tmp/phpcs/bin/phpcs . --standard=./phpcs.xml
-    - jshint test.js
-    - npm run test --coverage
 
 after_script:
   - php ./vendor/bin/php-coveralls -v
