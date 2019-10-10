@@ -1,18 +1,12 @@
-php:
-  preset:
-    - psr1
-    - psr2
-  risky: true
-  finder:
-    exclude:
-      - logs
-      - public
-      - src
-      - vendor
-    name: "*.php"
-    not-name: "*.blade.php"
-js: false
-ts: false
-css: false
-vue: false
-py: false
+preset:
+  - psr1
+  - psr2
+risky: true
+finder:
+  exclude:
+    - logs
+    - public
+    - src
+    - vendor
+  name: "*.php"
+  not-name: "*.blade.php"
