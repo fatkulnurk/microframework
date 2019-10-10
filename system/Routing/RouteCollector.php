@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing;
@@ -30,7 +31,7 @@ class RouteCollector
      */
     public function addRoute($httpMethod, string $route, $handler): void
     {
-        $route = $this->currentGroupPrefix . $route;
+        $route = $this->currentGroupPrefix.$route;
         $routeDatas = $this->routeParser->parse($route);
         foreach ((array) $httpMethod as $method) {
             foreach ($routeDatas as $routeData) {
@@ -47,13 +48,13 @@ class RouteCollector
     public function addGroup(string $prefix, callable $callback): void
     {
         $previousGroupPrefix = $this->currentGroupPrefix;
-        $this->currentGroupPrefix = $previousGroupPrefix . $prefix;
+        $this->currentGroupPrefix = $previousGroupPrefix.$prefix;
         $callback($this);
         $this->currentGroupPrefix = $previousGroupPrefix;
     }
 
     /**
-     * Adds a GET route to the collection
+     * Adds a GET route to the collection.
      *
      * This is simply an alias of $this->addRoute('GET', $route, $handler)
      *
@@ -65,7 +66,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a POST route to the collection
+     * Adds a POST route to the collection.
      *
      * This is simply an alias of $this->addRoute('POST', $route, $handler)
      *
@@ -77,7 +78,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a PUT route to the collection
+     * Adds a PUT route to the collection.
      *
      * This is simply an alias of $this->addRoute('PUT', $route, $handler)
      *
@@ -89,7 +90,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a DELETE route to the collection
+     * Adds a DELETE route to the collection.
      *
      * This is simply an alias of $this->addRoute('DELETE', $route, $handler)
      *
@@ -101,7 +102,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a PATCH route to the collection
+     * Adds a PATCH route to the collection.
      *
      * This is simply an alias of $this->addRoute('PATCH', $route, $handler)
      *
@@ -113,7 +114,7 @@ class RouteCollector
     }
 
     /**
-     * Adds a HEAD route to the collection
+     * Adds a HEAD route to the collection.
      *
      * This is simply an alias of $this->addRoute('HEAD', $route, $handler)
      *
@@ -125,7 +126,7 @@ class RouteCollector
     }
 
     /**
-     * Adds an OPTIONS route to the collection
+     * Adds an OPTIONS route to the collection.
      *
      * This is simply an alias of $this->addRoute('OPTIONS', $route, $handler)
      *

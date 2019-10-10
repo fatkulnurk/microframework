@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing\DataGenerator;
@@ -9,7 +10,7 @@ use function implode;
 class CharCountBased extends RegexBasedAbstract
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getApproxChunkSize(): int
     {
@@ -17,7 +18,7 @@ class CharCountBased extends RegexBasedAbstract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function processChunk(array $regexToRoutesMap): array
     {
@@ -31,12 +32,12 @@ class CharCountBased extends RegexBasedAbstract
             $suffixLen++;
             $suffix .= "\t";
 
-            $regexes[] = '(?:' . $regex . '/(\t{' . $suffixLen . '})\t{' . ($count - $suffixLen) . '})';
+            $regexes[] = '(?:'.$regex.'/(\t{'.$suffixLen.'})\t{'.($count - $suffixLen).'})';
             $routeMap[$suffix] = [$route->handler, $route->variables];
         }
 
-        $regex = '~^(?|' . implode('|', $regexes) . ')$~';
+        $regex = '~^(?|'.implode('|', $regexes).')$~';
 
-        return ['regex' => $regex, 'suffix' => '/' . $suffix, 'routeMap' => $routeMap];
+        return ['regex' => $regex, 'suffix' => '/'.$suffix, 'routeMap' => $routeMap];
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing\DataGenerator;
@@ -9,7 +10,7 @@ use function implode;
 class GroupPosBased extends RegexBasedAbstract
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getApproxChunkSize(): int
     {
@@ -17,7 +18,7 @@ class GroupPosBased extends RegexBasedAbstract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function processChunk(array $regexToRoutesMap): array
     {
@@ -31,7 +32,7 @@ class GroupPosBased extends RegexBasedAbstract
             $offset += count($route->variables);
         }
 
-        $regex = '~^(?:' . implode('|', $regexes) . ')$~';
+        $regex = '~^(?:'.implode('|', $regexes).')$~';
 
         return ['regex' => $regex, 'routeMap' => $routeMap];
     }

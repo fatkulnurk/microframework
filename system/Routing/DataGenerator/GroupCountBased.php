@@ -1,17 +1,18 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing\DataGenerator;
 
+use function max;
 use function count;
 use function implode;
-use function max;
 use function str_repeat;
 
 class GroupCountBased extends RegexBasedAbstract
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getApproxChunkSize(): int
     {
@@ -19,7 +20,7 @@ class GroupCountBased extends RegexBasedAbstract
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function processChunk(array $regexToRoutesMap): array
     {
@@ -30,13 +31,13 @@ class GroupCountBased extends RegexBasedAbstract
             $numVariables = count($route->variables);
             $numGroups = max($numGroups, $numVariables);
 
-            $regexes[] = $regex . str_repeat('()', $numGroups - $numVariables);
+            $regexes[] = $regex.str_repeat('()', $numGroups - $numVariables);
             $routeMap[$numGroups + 1] = [$route->handler, $route->variables];
 
-            ++$numGroups;
+            $numGroups++;
         }
 
-        $regex = '~^(?|' . implode('|', $regexes) . ')$~';
+        $regex = '~^(?|'.implode('|', $regexes).')$~';
 
         return ['regex' => $regex, 'routeMap' => $routeMap];
     }

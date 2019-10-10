@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing;
@@ -36,7 +37,7 @@ class Route
      */
     public function matches(string $str): bool
     {
-        $regex = '~^' . $this->regex . '$~';
+        $regex = '~^'.$this->regex.'$~';
 
         return (bool) preg_match($regex, $str);
     }

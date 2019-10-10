@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing\Dispatcher;
@@ -8,7 +9,7 @@ use function preg_match;
 class MarkBased extends RegexBasedAbstract
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function dispatchVariableRoute(array $routeData, string $uri): array
     {

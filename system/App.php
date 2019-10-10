@@ -1,14 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa;
 
-use Mifa\Routing\{
-    RouteParser,
-    DataGenerator,
-    Dispatcher,
-    RouteCollector
-};
+use Mifa\Routing\Dispatcher;
+use Mifa\Routing\RouteParser;
+use Mifa\Routing\DataGenerator;
+use Mifa\Routing\RouteCollector;
 
 class App
 {
@@ -30,8 +29,7 @@ class App
 
     public static function getInstance()
     {
-        if (self::$instance == null)
-        {
+        if (self::$instance == null) {
             self::$instance = new static();
         }
 
@@ -90,7 +88,7 @@ class App
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
                 // ... call $handler with $vars
-                die("yeah");
+                die('yeah');
                 break;
         }
     }

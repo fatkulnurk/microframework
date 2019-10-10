@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Mifa\Routing\Dispatcher;
@@ -9,12 +10,12 @@ use function preg_match;
 class CharCountBased extends RegexBasedAbstract
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function dispatchVariableRoute(array $routeData, string $uri): array
     {
         foreach ($routeData as $data) {
-            if (! preg_match($data['regex'], $uri . $data['suffix'], $matches)) {
+            if (! preg_match($data['regex'], $uri.$data['suffix'], $matches)) {
                 continue;
             }
 
