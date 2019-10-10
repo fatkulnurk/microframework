@@ -1,7 +1,4 @@
-preset:
-  - psr1
-  - psr2
-risky: true
+preset: laravel
 finder:
   exclude:
     - logs
