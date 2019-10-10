@@ -21,7 +21,7 @@ before_script:
 #  - mkdir -p tests/logs
 #
 #  - ./vendor/bin/phpunit -c ./ --coverage-text --coverage-clover tests/logs/clover.xml
-    - /tmp/phpcs/bin/phpcs ./system
+    - /tmp/phpcs/bin/phpcs ./system --standard=psr2
 #    - /tmp/phpcs/bin/phpcs . --standard=./phpcs.xml
 
 after_script:
