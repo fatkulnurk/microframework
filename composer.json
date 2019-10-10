@@ -14,7 +14,7 @@
     },
     "require": {
         "php": "^7.2",
-        "twig/twig":"^2.0",
+        "twig/twig":"2.*",
         "pyrocms/lex": "2.2.*"
     },
     "require-dev": {
