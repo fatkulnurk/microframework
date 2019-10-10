@@ -82,7 +82,7 @@ class App
             case Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
-            new \ErrorException('Method Not Allow', '403');
+                new \ErrorException('Method Not Allow', '403');
                 break;
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];

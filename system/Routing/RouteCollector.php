@@ -6,13 +6,25 @@ namespace Mifa\Routing;
 
 class RouteCollector
 {
-    /** @var RouteParser */
+    /**
+     * 
+     *
+     * @var RouteParser 
+     */
     protected $routeParser;
 
-    /** @var DataGenerator */
+    /**
+     * 
+     *
+     * @var DataGenerator 
+     */
     protected $dataGenerator;
 
-    /** @var string */
+    /**
+     * 
+     *
+     * @var string 
+     */
     protected $currentGroupPrefix = '';
 
     public function __construct(RouteParser $routeParser, DataGenerator $dataGenerator)

@@ -26,7 +26,11 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
             'routeCollector' => RouteCollector::class,
         ];
 
-        /** @var RouteCollector $routeCollector */
+        /**
+* 
+         *
+ * @var RouteCollector $routeCollector 
+*/
         $routeCollector = new $options['routeCollector'](
             new $options['routeParser'](), new $options['dataGenerator']()
         );
@@ -53,7 +57,7 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
         }
 
         if (! $options['cacheDisabled'] && file_exists($options['cacheFile'])) {
-            $dispatchData = require $options['cacheFile'];
+            $dispatchData = include $options['cacheFile'];
             if (! is_array($dispatchData)) {
                 throw new RuntimeException('Invalid cache file "'.$options['cacheFile'].'"');
             }
@@ -66,7 +70,11 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
         );
         $routeDefinitionCallback($routeCollector);
 
-        /** @var RouteCollector $routeCollector */
+        /**
+* 
+         *
+ * @var RouteCollector $routeCollector 
+*/
         $dispatchData = $routeCollector->getData();
         if (! $options['cacheDisabled']) {
             file_put_contents(

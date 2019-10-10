@@ -8,16 +8,32 @@ use function preg_match;
 
 class Route
 {
-    /** @var string */
+    /**
+     * 
+     *
+     * @var string 
+     */
     public $httpMethod;
 
-    /** @var string */
+    /**
+     * 
+     *
+     * @var string 
+     */
     public $regex;
 
-    /** @var mixed[] */
+    /**
+     * 
+     *
+     * @var mixed[] 
+     */
     public $variables;
 
-    /** @var mixed */
+    /**
+     * 
+     *
+     * @var mixed 
+     */
     public $handler;
 
     /**
