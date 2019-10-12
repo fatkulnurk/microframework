@@ -27,7 +27,8 @@ class App
     {
     }
 
-    public static function getInstance()
+    /** @return App */
+    public static function getInstance() : App
     {
         if (self::$instance == null) {
             self::$instance = new static();
@@ -36,6 +37,13 @@ class App
         return self::$instance;
     }
 
+    /**
+     * Method ini untuk interaksi dengan routing
+     * Pada bagian ini terdapat parser, data degerator, dispatcher dan routecollector
+     * @param callable $routeDefinitionCallback
+     * @param array $options
+     * @return Dispatcher
+     */
     public function routing(callable $routeDefinitionCallback, array $options = []): Dispatcher
     {
         $options += [
@@ -57,11 +65,29 @@ class App
 //        $this->dispatcher = new $options['dispatcher']($routeCollector->getData());
     }
 
-    /*
+    /**
+     * Method ini digunakan untuk melakukan pengecekan
+     * Apakah alamat yang dikunjungi terdaftar atau tidak pada routing
+     * Serta untuk pemanggilan handler jika memang alamat terdaftar
      *
-     * @return void
-     * */
-    public function dispatch()
+     * Cara Kerjanya
+     * Dicek apakah url terdaftar di routecollection, alias tempat routing di daftarkan
+     *
+     * Jika Tidak ditemukan
+     * maka akan menjalankan Dispatcher bagian not found
+     *
+     * Jika ternyata alamat terdaftar, tetapi method pemanggilan salah
+     * Maka, akan dijalankan dispatcher bagian method not allowed
+     * Contohnya adalah
+     *      Halaman localhost/about methodnya adalah GET
+     *      Tetapi di akses dengan method POST
+     *
+     * Jika ternyata alamat terdaftar & Method pemanggilan benar
+     * Maka, Akan menjalankan dispartcher bagian found
+     *
+     * @return mixed|void
+     */
+    public function dispatch() : void
     {
         // Fetch method and URI from somewhere
         $httpMethod = $_SERVER['REQUEST_METHOD'];
@@ -78,6 +104,7 @@ class App
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
                 // ... 404 Not Found
+                new \ErrorException("ERROR", 404);
                 break;
             case Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
@@ -87,8 +114,21 @@ class App
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
-                // ... call $handler with $vars
-                die('yeah');
+
+                /*
+                 * Pada bagian ini di cek, apalah $handler itu callable atau callback atau tidak.
+                 * Jika tidak, maka dilakukan explode dengan delimeter /
+                 * untuk mendapatkan informasi class dan method, lalu menjalankan.
+                 *
+                 * Dokumentasi selengkapnya: https://www.php.net/manual/en/language.types.callable.php
+                 * */
+                if (is_callable($handler, true)) {
+                    call_user_func($handler, $vars);
+                } else {
+                    list($class, $method) = explode("/", $handler, 2);
+                    call_user_func_array(array(new $class, $method), $vars);
+                }
+
                 break;
         }
     }
