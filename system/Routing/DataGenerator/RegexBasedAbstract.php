@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mifa\Routing\DataGenerator;
+namespace Fatkulnurk\Microframework\Routing\DataGenerator;
 
 use function max;
 use function ceil;
@@ -12,12 +12,12 @@ use function strpos;
 use function sprintf;
 use function array_map;
 use function is_string;
-use Mifa\Routing\Route;
 use function preg_match;
 use function preg_quote;
 use function array_chunk;
-use Mifa\Routing\DataGenerator;
-use Mifa\Routing\BadRouteException;
+use Fatkulnurk\Microframework\Routing\Route;
+use Fatkulnurk\Microframework\Routing\DataGenerator;
+use Fatkulnurk\Microframework\Routing\BadRouteException;
 
 abstract class RegexBasedAbstract implements DataGenerator
 {

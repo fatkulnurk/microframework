@@ -1,7 +1,7 @@
 <?php
 require_once 'vendor/autoload.php';
 
-use Mifa\App;
+use Fatkulnurk\Microframework\App;
 
 // membuat instance app
 $app = App::getInstance();

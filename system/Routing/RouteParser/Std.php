@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mifa\Routing\RouteParser;
+namespace Fatkulnurk\Microframework\Routing\RouteParser;
 
 use function trim;
 use function count;
@@ -13,9 +13,9 @@ use function preg_match;
 use function preg_split;
 use const PREG_SET_ORDER;
 use function preg_match_all;
-use Mifa\Routing\RouteParser;
+use Fatkulnurk\Microframework\Routing\RouteParser;
 use const PREG_OFFSET_CAPTURE;
-use Mifa\Routing\BadRouteException;
+use Fatkulnurk\Microframework\Routing\BadRouteException;
 
 /**
  * Parses route strings of the following form:.
