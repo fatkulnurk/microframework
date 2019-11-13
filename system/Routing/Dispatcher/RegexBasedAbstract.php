@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Mifa\Routing\Dispatcher;
+namespace Fatkulnurk\Microframework\Routing\Dispatcher;
 
-use Mifa\Routing\Dispatcher;
+use Fatkulnurk\Microframework\Routing\Dispatcher;
 
 abstract class RegexBasedAbstract implements Dispatcher
 {

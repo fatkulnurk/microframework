@@ -2,17 +2,35 @@
 
 declare(strict_types=1);
 
-namespace Mifa;
+namespace Fatkulnurk\Microframework;
 
-use Mifa\Routing\Dispatcher;
-use Mifa\Routing\RouteParser;
-use Mifa\Routing\DataGenerator;
-use Mifa\Routing\RouteCollector;
+use Fatkulnurk\Microframework\Core\Singleton;
+use Fatkulnurk\Microframework\Routing\Dispatcher;
+use Fatkulnurk\Microframework\Routing\RouteParser;
+use Fatkulnurk\Microframework\Routing\DataGenerator;
+use Fatkulnurk\Microframework\Routing\RouteCollector;
 
 class App
 {
+    use Singleton;
+
     /** @var App|null Untuk menyimpan instance dari class ini */
-    private static $instance = null;
+//    private static $instance = null;
+//
+//    private function __construct()
+//    {
+//    }
+//
+//    /** @return App */
+//    public static function getInstance() : App
+//    {
+//        if (self::$instance == null) {
+//            self::$instance = new static();
+//        }
+//
+//        return self::$instance;
+//    }
+
 
     /** @var Dispatcher|null Untuk menyimpan informasi dari routing, setelah di deklarasikan */
     private $dispatcher;
@@ -23,19 +41,6 @@ class App
     /** @var ResponseInterface|null Untuk menyimpan informasi dari response secara globals */
     private $response = null;
 
-    private function __construct()
-    {
-    }
-
-    /** @return App */
-    public static function getInstance() : App
-    {
-        if (self::$instance == null) {
-            self::$instance = new static();
-        }
-
-        return self::$instance;
-    }
 
     /**
      * Method ini untuk interaksi dengan routing
@@ -89,8 +94,9 @@ class App
      */
     public function dispatch() : void
     {
-        // Fetch method and URI from somewhere
+        // mendapatkan method
         $httpMethod = $_SERVER['REQUEST_METHOD'];
+        // mendapatkan uri
         $uri = $_SERVER['REQUEST_URI'];
 
         // Strip query string (?foo=bar) and decode URI
@@ -130,6 +136,9 @@ class App
                 }
 
                 break;
+
+            default:
+                new \ErrorException('Handler Error');
         }
     }
 }

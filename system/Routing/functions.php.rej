@@ -1,0 +1,14 @@
+diff a/system/Routing/functions.php b/system/Routing/functions.php	(rejected hunks)
+@@ -70,7 +70,11 @@
+         );
+         $routeDefinitionCallback($routeCollector);
+ 
+-        /** @var RouteCollector $routeCollector */
++        /**
++* 
++         *
++ * @var RouteCollector $routeCollector 
++*/
+         $dispatchData = $routeCollector->getData();
+         if (! $options['cacheDisabled']) {
+             file_put_contents(

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mifa\Routing\Dispatcher;
+namespace Fatkulnurk\Microframework\Routing\Dispatcher;
 
 use function preg_match;
 

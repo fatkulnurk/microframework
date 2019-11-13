@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mifa\Routing;
+namespace Fatkulnurk\Microframework\Routing;
 
 class RouteCollector
 {
