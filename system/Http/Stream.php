@@ -195,7 +195,6 @@ final class Stream implements StreamInterface
      */
     public function eof(): bool
     {
-        // TODO: Implement eof() method.
         return !$this->stream || feof($this->stream);
     }
 
@@ -206,7 +205,6 @@ final class Stream implements StreamInterface
      */
     public function isSeekable(): bool
     {
-        // TODO: Implement isSeekable() method.
         return $this->seekable;
     }
 
@@ -224,8 +222,6 @@ final class Stream implements StreamInterface
      */
     public function seek($offset, $whence = SEEK_SET): void
     {
-        // TODO: Implement seek() method.
-
         if (!$this->seekable) {
             throw new \RuntimeException('Stream is not seekable');
         }
@@ -247,7 +243,6 @@ final class Stream implements StreamInterface
  */
     public function rewind(): void
     {
-        // TODO: Implement rewind() method.
         $this->seek(0);
     }
 
@@ -258,7 +253,6 @@ final class Stream implements StreamInterface
      */
     public function isWritable(): bool
     {
-        // TODO: Implement isWritable() method.
         return $this->writable;
     }
 
@@ -271,7 +265,6 @@ final class Stream implements StreamInterface
      */
     public function write($string): int
     {
-        // TODO: Implement write() method.
         if (!$this->writable) {
             throw new \RuntimeException('Cannot write to a non-writable stream');
         }
@@ -291,7 +284,6 @@ final class Stream implements StreamInterface
      */
     public function isReadable(): bool
     {
-        // TODO: Implement isReadable() method.
         return $this->readable;
     }
 
