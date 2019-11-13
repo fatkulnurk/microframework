@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Fatkulnurk\Microframework\Http\Message;
 
+use InvalidArgumentException;
 use Psr\Http\Message\UriInterface;
+use function is_string;
+use function preg_match;
 
 trait RequestTrait
 {
@@ -35,8 +38,8 @@ trait RequestTrait
 
     public function withRequestTarget($requestTarget): self
     {
-        if (\preg_match('#\s#', $requestTarget)) {
-            throw new \InvalidArgumentException('Invalid request target provided; cannot contain whitespace');
+        if (preg_match('#\s#', $requestTarget)) {
+            throw new InvalidArgumentException('Invalid request target provided; cannot contain whitespace');
         }
 
         $new = clone $this;
@@ -52,8 +55,8 @@ trait RequestTrait
 
     public function withMethod($method): self
     {
-        if (!\is_string($method)) {
-            throw new \InvalidArgumentException('Method must be a string');
+        if (!is_string($method)) {
+            throw new InvalidArgumentException('Method must be a string');
         }
 
         $new = clone $this;
