@@ -1,6 +1,8 @@
 <?php
+namespace Fatkulnurk\Microframework\Http\Data\Document;
 
-interface AbstractDocument
+interface DocumentFactory
 {
-
+    public function createFromArray(array $data);
+    public function createFromObject(object $data);
 }

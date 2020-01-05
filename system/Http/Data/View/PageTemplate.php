@@ -1,7 +1,9 @@
 <?php
+namespace Fatkulnurk\Microframework\Http\Data\View;
 
-
-interface OpenTemplate
+interface PageTemplate
 {
+    public function getTemplateString();
+
     public function openFileTemplate();
 }
