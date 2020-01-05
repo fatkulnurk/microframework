@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace Fatkulnurk\Microframework;
 
 use Fatkulnurk\Microframework\Core\Singleton;
+use Fatkulnurk\Microframework\Http\Message\Response;
 use Fatkulnurk\Microframework\Routing\Dispatcher;
 use Fatkulnurk\Microframework\Routing\RouteParser;
 use Fatkulnurk\Microframework\Routing\DataGenerator;
 use Fatkulnurk\Microframework\Routing\RouteCollector;
+use Narrowspark\HttpEmitter\SapiEmitter;
+use Whoops\Handler\HandlerInterface;
 
 class App
 {
@@ -128,17 +131,50 @@ class App
                  *
                  * Dokumentasi selengkapnya: https://www.php.net/manual/en/language.types.callable.php
                  * */
+//                if (is_callable($handler, true)) {
+//                    call_user_func($handler, $vars);
+//                } else {
+//                    list($class, $method) = explode("/", $handler, 2);
+//                    call_user_func_array(array(new $class, $method), $vars);
+//                }
+
                 if (is_callable($handler, true)) {
-                    call_user_func($handler, $vars);
+                    $response = call_user_func($handler, $vars);
                 } else {
                     list($class, $method) = explode("/", $handler, 2);
-                    call_user_func_array(array(new $class, $method), $vars);
+                    $response = call_user_func_array(array(new $class, $method), $vars);
                 }
 
+//                if ($response instanceof \Nyholm\Psr7\Response) {
+                if ($response instanceof Response) {
+                    (new \Zend\HttpHandlerRunner\Emitter\SapiEmitter())->emit($response);
+//                    $emitter = new SapiEmitter();
+//                    $emitter->emit($response);
+                } else {
+                    if (is_callable($handler, true)) {
+                        call_user_func($handler, $vars);
+                    } else {
+                        list($class, $method) = explode("/", $handler, 2);
+                        call_user_func_array(array(new $class, $method), $vars);
+                    }
+                }
                 break;
 
             default:
                 new \ErrorException('Handler Error');
+        }
+    }
+
+    public function errorView(HandlerInterface $handler = null)
+    {
+        if ($handler instanceof HandlerInterface) {
+            $whoops = new \Whoops\Run;
+            $whoops->prependHandler($handler);
+            $whoops->register();
+        } else {
+            $whoops = new \Whoops\Run;
+            $whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler);
+            $whoops->register();
         }
     }
 }
