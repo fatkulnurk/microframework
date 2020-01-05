@@ -40,8 +40,14 @@ class ServerRequest implements ServerRequestInterface
      * @param string $version Protocol version
      * @param array $serverParams Typically the $_SERVER superglobal
      */
-    public function make(string $method, $uri, array $headers = [], $body = null, string $version = '1.1', array $serverParams = [])
-    {
+    public function make(
+        string $method,
+        $uri,
+        array $headers = [],
+        $body = null,
+        string $version = '1.1',
+        array $serverParams = []
+    ) {
         $this->serverParams = $serverParams;
 
         if (!($uri instanceof UriInterface)) {
@@ -61,6 +67,8 @@ class ServerRequest implements ServerRequestInterface
         if ('' !== $body && null !== $body) {
             $this->stream = Stream::create($body);
         }
+
+        return $this;
     }
 
     public function getServerParams(): array
