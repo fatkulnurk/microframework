@@ -5,5 +5,5 @@ namespace Fatkulnurk\Microframework\Http\Data;
 
 interface ViewInterface
 {
-
+    public function render();
 }
