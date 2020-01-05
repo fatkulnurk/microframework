@@ -1,7 +1,7 @@
 <?php
 namespace Tests\UriTest;
 
-use Mifa\Http\Message\Uri;
+use FatkulNurK\Microframework\Http\Message\Uri;
 use PHPUnit\Framework\TestCase;
 
 class UriTest extends TestCase
