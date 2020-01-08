@@ -45,6 +45,11 @@ class App
     private $response = null;
 
 
+    protected $config = [
+        'path_template' => __DIR__ . "./../src/views",
+        'path_public' => __DIR__ . "./../public/"
+    ];
+
     /**
      * Method ini untuk interaksi dengan routing
      * Pada bagian ini terdapat parser, data degerator, dispatcher dan routecollector
@@ -145,8 +150,27 @@ class App
                     $response = call_user_func_array(array(new $class, $method), $vars);
                 }
 
+            /*
+             * Untuk redirect
+             * source: https://stackoverflow.com/questions/768431/how-do-i-make-a-redirect-in-php
+             * */
+//                if ($response->hasHeader('location')) {
+//                    $result = $response->getHeader('location');
+//                    // die($result[0]);
+//                    header("Location: ". (string) $result[0], true, 301);
+//                    die();
+//                }
+
 //                if ($response instanceof \Nyholm\Psr7\Response) {
                 if ($response instanceof Response) {
+                    if ($response->hasHeader('location')) {
+                        $result = $response->getHeader('location');
+                        // die($result[0]);
+                        header("Location: ". (string) $result[0], true, 301);
+                        die();
+                    }
+
+
                     (new \Zend\HttpHandlerRunner\Emitter\SapiEmitter())->emit($response);
 //                    $emitter = new SapiEmitter();
 //                    $emitter->emit($response);
@@ -176,5 +200,25 @@ class App
             $whoops->prependHandler(new \Whoops\Handler\PrettyPageHandler);
             $whoops->register();
         }
+    }
+
+    /*
+     * CONFIG
+     * Bagian ini berisi informasi mengenai
+     * Setter Getter untuk konfigurasi
+     * */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+    }
+
+    public function getConfig($key)
+    {
+        $keyToLower = \strtolower($key);
+        if (isset($this->config[$keyToLower])) {
+            return $this->config[$key];
+        }
+
+        throw new \Exception("Key Not Found In Config");
     }
 }
