@@ -2,13 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Halaman Awal</title>
+    <title>Selamat Datang</title>
 </head>
 <body>
 <div>
-    Halo {{ name }}!
-    <br>
-    Tanggal lahir kamu {{ birthday }}
+    <h1>Selamat Datang</h1>
 </div>
 </body>
 </html>
