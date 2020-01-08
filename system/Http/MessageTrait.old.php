@@ -13,7 +13,7 @@ use function strtolower;
 use function trim;
 
 //class MessageTrait implements MessageInterface
-trait MessageTrait
+trait MessageTraitOld
 {
     private $headers = [];
 
