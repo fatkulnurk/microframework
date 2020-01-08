@@ -1,6 +1,8 @@
 <?php
 namespace Fatkulnurk\Microframework\Http\Data\View;
 
+use Fatkulnurk\Microframework\App;
+
 /**
  * Class BasePageTemplate
  */
@@ -9,8 +11,8 @@ abstract class BasePageTemplate implements PageTemplate
     /**
      * @var string
      */
-    protected $baseLocation = '\xampp\htdocs\microframework\src\views';
-//    protected $baseLocation = '../../../src/views';
+    protected $baseLocation = '';
+
     /**
      * @var string
      */
@@ -23,9 +25,16 @@ abstract class BasePageTemplate implements PageTemplate
     /**
      * BasePageTemplate constructor.
      * @param string $location
+     * @throws \Exception
      */
     public function __construct(string $location = '')
     {
+        try {
+            $this->baseLocation = App::getInstance()->getConfig('path_template');
+        } catch (\Exception $exception) {
+            throw new \Exception('config with key path_template not found');
+        }
+        // $this->baseLocation = $_SERVER['DOCUMENT_ROOT'] . "./../src/views";
         $this->location = $location;
     }
 
