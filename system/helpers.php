@@ -71,46 +71,6 @@ if (!function_exists('base_path_src')) {
         }
     }
 
-    if (!function_exists('arrayzy')) {
-        /**
-         * Returns Arrayzy instance, also from different arguments
-         *
-         * @param null $data
-         * @param null $separator
-         *
-         * @return \Arrayzy\AbstractArray
-         */
-        function arrayzy($data = null, $separator = null)
-        {
-            if (!is_null($data)) {
-                if (is_array($data)) {
-                    return ArrayImitator::create($data);
-                } elseif (is_object($data)) {
-                    return ArrayImitator::createFromObject($data);
-                } elseif (is_string($data) && !is_null($separator)) {
-                    return ArrayImitator::createFromString($data, $separator);
-                } elseif (is_json($data)) {
-                    return ArrayImitator::createFromJson($data);
-                }
-            }
-
-            return ArrayImitator::create([]);
-        }
-    }
-
-    if (!function_exists('stringy')) {
-        /**
-         * Returns Stringy instance, also from different arguments
-         * @param string $content
-         *
-         * @return Stringy
-         */
-        function stringy(string $content = '')
-        {
-            return Stringy::create($content);
-        }
-    }
-
     if (!function_exists('now')) {
         /**
          * Returns a new Carbon instance
