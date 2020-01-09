@@ -82,7 +82,7 @@ if (!function_exists('base_path_src')) {
                 return \Carbon\Carbon::now();
             }
 
-            return 'Carbon Not Instaled';
+            return 'Carbon Not Instaled, please install';
         }
     }
 }
