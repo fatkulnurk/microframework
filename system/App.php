@@ -118,12 +118,12 @@ class App
         switch ($routeInfo[0]) {
             case Dispatcher::NOT_FOUND:
                 // ... 404 Not Found
-                new \ErrorException("ERROR", 404);
+                throw new \ErrorException("Page Not Found", 404);
                 break;
             case Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
-                new \ErrorException('Method Not Allow', '403');
+                throw new \ErrorException('Method Not Allow', '403');
                 break;
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];
@@ -176,7 +176,8 @@ class App
 //                    $emitter->emit($response);
                 } else {
                     if (is_callable($handler, true)) {
-                        call_user_func($handler, $vars);
+                        // enggak usah di pakai, kan udah di panggil diatas
+//                        call_user_func($handler, $vars);
                     } else {
                         list($class, $method) = explode("/", $handler, 2);
                         call_user_func_array(array(new $class, $method), $vars);
@@ -185,7 +186,7 @@ class App
                 break;
 
             default:
-                new \ErrorException('Handler Error');
+                throw new \ErrorException('Handler Error');
         }
     }
 

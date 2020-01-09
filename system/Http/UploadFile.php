@@ -17,12 +17,6 @@ use function sprintf;
 use const PHP_SAPI;
 use const UPLOAD_ERR_OK;
 
-/**
- * @author Michael Dowling and contributors to guzzlehttp/psr7
- * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- * @author Martijn van der Ven <martijn@vanderven.se>
- * @author Fatkul Nur K <fatkulnurk@gmail.com>
- */
 final class UploadedFile implements UploadedFileInterface
 {
     /** @var array */

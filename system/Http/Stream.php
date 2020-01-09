@@ -83,12 +83,13 @@ final class Stream implements StreamInterface
     }
 
     /**
-     * Reads all data from the stream into a string, from the beginning to end.
+     * Membaca semua data dari stream kedalam string, mulai dari awal sampai akhir.
      *
-     * This method MUST attempt to seek to the beginning of the stream before
-     * reading data and read the stream until the end is reached.
+     * Metode ini HARUS berusaha mencari ke awal aliran sebelumnya
+     * membaca data dan membaca aliran sampai akhir tercapai.
      *
-     * Warning: This could attempt to load a large amount of data into memory.
+     * Warning / Peringatan:
+     * ini dapat mencoba memuat sejumlah besar data ke dalam memori.
      *
      * This method MUST NOT raise an exception in order to conform with PHP's
      * string casting operations.

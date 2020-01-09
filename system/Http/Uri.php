@@ -219,7 +219,7 @@ final class Uri implements UriInterface
      */
     public function withHost($host): self
     {
-        if (is_string($host)) {
+        if (!\is_string($host)) {
             throw new InvalidArgumentException("Host must be a string");
         }
 
