@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+//declare(strict_types=1);
 
 namespace Fatkulnurk\Microframework\Http\Message;
 
@@ -322,7 +322,8 @@ final class Response implements ResponseInterface
             header("Content-Transfer-Encoding: binary");
         }
         try {
-            readfile(App::getInstance()->getConfig('path_public') . $data);
+            readfile(App::getInstance()->getPath() . $data);
+//            readfile(App::getInstance()->getConfig('path_public') . $data);
         } catch (\Exception $e) {
             echo $e;
             throw new \Exception("Path Not Found");

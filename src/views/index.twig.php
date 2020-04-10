@@ -6,6 +6,8 @@
 </head>
 <body>
 <div>
+    {% include 'header.html' %}
+    <hr>
     <h1>Selamat Datang</h1>
 </div>
 </body>
