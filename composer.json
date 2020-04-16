@@ -25,7 +25,8 @@
         "nyholm/psr7": "^1.2",
         "zendframework/zend-httphandlerrunner": "^1.1",
         "salernolabs/php-to-xml": "^1.0",
-        "filp/whoops": "^2.5"
+        "filp/whoops": "^2.5",
+        "adbario/php-dot-notation": "^2.2"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "3.*",
