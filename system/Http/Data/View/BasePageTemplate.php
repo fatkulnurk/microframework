@@ -30,12 +30,16 @@ abstract class BasePageTemplate implements PageTemplate
     public function __construct(string $location = '')
     {
         try {
-            $this->baseLocation = App::getInstance()->getConfig('path_template');
+            $this->baseLocation = App::getInstance()->getPath();
         } catch (\Exception $exception) {
-            throw new \Exception('config with key path_template not found');
+            throw new \Exception('Path not found');
         }
-        // $this->baseLocation = $_SERVER['DOCUMENT_ROOT'] . "./../src/views";
-        $this->location = $location;
+
+        if (empty($location)) {
+            $this->location = $this->baseLocation;
+        } else {
+            $this->location = $location;
+        }
     }
 
     /**
