@@ -3,9 +3,12 @@ use Fatkulnurk\Microframework\Http\Message\Response;
 use Fatkulnurk\Microframework\Routing\RouteCollector;
 
 return function (RouteCollector $r) {
-    $r->addRoute('GET', '/', function ($args) {
+    $r->addRoute(['GET', 'POST'], '/', function ($args) {
         return Response::getInstance()
-            ->withView('index');
+            ->withView('index.twig', [
+                'title' => 'Microframework',
+                'message' => 'Welcome To Microframework',
+            ]);
     });
 
     $r->addRoute('GET', '/name/{name}', function ($args) {
