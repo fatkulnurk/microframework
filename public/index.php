@@ -3,16 +3,24 @@ require_once '../vendor/autoload.php';
 
 use Fatkulnurk\Microframework\App;
 
-// membuat instance app
+// create instance
 $app = App::getInstance();
+
+// set Base Dir
 $app->setPath(__DIR__);
 
-// pendaftaran routes
+// set config
+$app->setConfig([
+    'path_template' => __DIR__ . "./../src/views",
+    'path_public' => __DIR__ . "./../public/"
+]);
+
+// registration route
 $routes = require __DIR__ . '/../src/route.php';
 $app->routing($routes);
 
-// menjalankan custom errornya, saya pakai whoops
+// error handling (with whoops)
 $app->errorView();
 
-// menjalankan aplikasi & proses dispatch
+// run app
 $app->dispatch();

@@ -3,8 +3,8 @@
 
 namespace Fatkulnurk\Microframework\Http\Message;
 
+use Adbar\Dot;
 use Fatkulnurk\Microframework\Core\Singleton;
-use phpDocumentor\Reflection\Types\This;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
@@ -118,17 +118,17 @@ final class ServerRequest implements ServerRequestInterface
             $this->stream = Stream::create($body);
         }
 
-        $cookies = empty($_COOKIE) ? array($_COOKIE) : [];
+//        $cookies = empty($_COOKIE) ? array($_COOKIE) : [];
 //        $this->withCookieParams($cookies);
-        $this->cookieParams = array($_COOKIE);
+        $this->cookieParams = $_COOKIE;
 
-        $gets = empty($_GET) ? array($_GET) : [];
+//        $gets = empty($_GET) ? array($_GET) : [];
 //        $this->withQueryParams($gets);
-        $this->queryParams = array($_GET);
+        $this->queryParams = $_GET;
 
-        $posts = empty($_POST) ? array($_POST) : [];
+//        $posts = empty($_POST) ? array($_POST) : [];
 //        $this->withParsedBody($posts);
-        $this->parsedBody = array($_POST);
+        $this->parsedBody = $_POST;
 
         $this->uploadedFiles = $this->normalizeFiles();
 
@@ -463,5 +463,35 @@ final class ServerRequest implements ServerRequestInterface
             $size = $stream->getSize();
         }
         return new UploadedFile($stream, $size, $error, $clientFilename, $clientMediaType);
+    }
+
+
+    // need DOTKey
+    public function query(string $key, $default = '')
+    {
+        $dotKey = new Dot($this->getQueryParams());
+
+        return $dotKey->get($key, $default);
+    }
+
+    public function hasQuery(string $key)
+    {
+        $dotKey = new Dot($this->queryParams);
+
+        return $dotKey->has($key);
+    }
+
+    public function input(string $key, $default = '')
+    {
+        $dotkey = new Dot($this->parsedBody);
+
+        return $dotkey->get($key, $default);
+    }
+
+    public function hasInput(string $key)
+    {
+        $dotkey = new Dot($this->parsedBody);
+
+        return $dotkey->has($key);
     }
 }

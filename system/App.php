@@ -49,10 +49,7 @@ class App
 
     public $path = '';
 
-    protected $config = [
-        'path_template' => __DIR__ . "./../src/views",
-        'path_public' => __DIR__ . "./../public/"
-    ];
+    protected $config = [];
 
     /**
      * Method ini untuk interaksi dengan routing
@@ -182,7 +179,7 @@ class App
      * Bagian ini berisi informasi mengenai
      * Setter Getter untuk konfigurasi
      * */
-    public function setConfig($config)
+    public function setConfig(array $config)
     {
         $this->config = $config;
     }

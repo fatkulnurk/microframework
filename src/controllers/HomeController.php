@@ -8,6 +8,6 @@ class HomeController
 {
     public function welcome()
     {
-        echo "hello bro";
+        echo "welcome";
     }
 }
