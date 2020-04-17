@@ -6,11 +6,14 @@ namespace Fatkulnurk\Microframework;
 
 use Fatkulnurk\Microframework\Core\Singleton;
 use Fatkulnurk\Microframework\Http\Message\Response;
+use Fatkulnurk\Microframework\Http\Message\ServerRequest;
 use Fatkulnurk\Microframework\Routing\Dispatcher;
 use Fatkulnurk\Microframework\Routing\RouteParser;
 use Fatkulnurk\Microframework\Routing\DataGenerator;
 use Fatkulnurk\Microframework\Routing\RouteCollector;
+use Fatkulnurk\Microframework\System\Core\Exception\UnknowHandlerType;
 use Narrowspark\HttpEmitter\SapiEmitter;
+use ReflectionMethod;
 use Whoops\Handler\HandlerInterface;
 
 class App
@@ -44,6 +47,7 @@ class App
     /** @var ResponseInterface|null Untuk menyimpan informasi dari response secara globals */
     private $response = null;
 
+    public $path = '';
 
     protected $config = [
         'path_template' => __DIR__ . "./../src/views",
@@ -99,6 +103,7 @@ class App
      * Maka, Akan menjalankan dispartcher bagian found
      *
      * @return mixed|void
+     * @throws UnknowHandlerType
      */
     public function dispatch() : void
     {
@@ -106,6 +111,11 @@ class App
         $httpMethod = $_SERVER['REQUEST_METHOD'];
         // mendapatkan uri
         $uri = $_SERVER['REQUEST_URI'];
+
+        /* Optional */
+//        $httpMethod = ServerRequest::getInstance()->getMethod();
+//        $uri = ServerRequest::getInstance()->getUri()->getScheme();
+
 
         // Strip query string (?foo=bar) and decode URI
         if (false !== $pos = strpos($uri, '?')) {
@@ -129,64 +139,28 @@ class App
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
 
-                /*
-                 * Pada bagian ini di cek, apalah $handler itu callable atau callback atau tidak.
-                 * Jika tidak, maka dilakukan explode dengan delimeter /
-                 * untuk mendapatkan informasi class dan method, lalu menjalankan.
-                 *
-                 * Dokumentasi selengkapnya: https://www.php.net/manual/en/language.types.callable.php
-                 * */
-//                if (is_callable($handler, true)) {
-//                    call_user_func($handler, $vars);
-//                } else {
-//                    list($class, $method) = explode("/", $handler, 2);
-//                    call_user_func_array(array(new $class, $method), $vars);
-//                }
-
-                if (is_callable($handler, true)) {
+                if ($handler instanceof \Closure) {
                     $response = call_user_func($handler, $vars);
                 } else {
-                    list($class, $method) = explode("/", $handler, 2);
-                    $response = call_user_func_array(array(new $class, $method), $vars);
+                    $resultExplode = explode('::', $handler);
+                    $response = $this->reflectionHandler($resultExplode[0], $resultExplode[1], $vars);
                 }
 
-            /*
-             * Untuk redirect
-             * source: https://stackoverflow.com/questions/768431/how-do-i-make-a-redirect-in-php
-             * */
-//                if ($response->hasHeader('location')) {
-//                    $result = $response->getHeader('location');
-//                    // die($result[0]);
-//                    header("Location: ". (string) $result[0], true, 301);
-//                    die();
-//                }
-
-//                if ($response instanceof \Nyholm\Psr7\Response) {
                 if ($response instanceof Response) {
                     if ($response->hasHeader('location')) {
                         $result = $response->getHeader('location');
-                        // die($result[0]);
                         header("Location: ". (string) $result[0], true, 301);
                         die();
                     }
 
-
                     (new \Zend\HttpHandlerRunner\Emitter\SapiEmitter())->emit($response);
-//                    $emitter = new SapiEmitter();
-//                    $emitter->emit($response);
-                } else {
-                    if (is_callable($handler, true)) {
-                        // enggak usah di pakai, kan udah di panggil diatas
-//                        call_user_func($handler, $vars);
-                    } else {
-                        list($class, $method) = explode("/", $handler, 2);
-                        call_user_func_array(array(new $class, $method), $vars);
-                    }
+                    die();
                 }
+
                 break;
 
             default:
-                throw new \ErrorException('Handler Error');
+                throw new UnknowHandlerType('Unknow Handler Type / Handler Error');
         }
     }
 
@@ -221,5 +195,24 @@ class App
         }
 
         throw new \Exception("Key Not Found In Config");
+    }
+
+    public function setPath($path)
+    {
+        $this->path = $path;
+        return $this;
+    }
+
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    private function reflectionHandler($class, $method, $args)
+    {
+        $instance = new $class();
+
+        $reflectionMethod = new ReflectionMethod($class, $method);
+        return $reflectionMethod->invoke($instance, $args);
     }
 }

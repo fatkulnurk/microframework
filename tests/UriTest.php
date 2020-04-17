@@ -1,5 +1,5 @@
 <?php
-namespace Tests\UriTest;
+namespace Tests\Microframework;
 
 use FatkulNurK\Microframework\Http\Message\Uri;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +20,5 @@ class UriTest extends TestCase
         $this->assertSame('q=abc', $uri->getQuery());
         $this->assertSame('test', $uri->getFragment());
         $this->assertSame('https://user:pass@example.com:8080/path/123?q=abc#test', (string) $uri);
-//        $this->assertSame('');
     }
 }

@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+//declare(strict_types=1);
 
 namespace Fatkulnurk\Microframework\Http\Message;
 
@@ -19,9 +19,8 @@ use function is_string;
 
 final class Response implements ResponseInterface
 {
-//    use MessageTrait;
-//    use MessageTrait;
-    use \Nyholm\Psr7\MessageTrait;
+    use MessageTrait;
+//    use \Nyholm\Psr7\MessageTrait;
     use Singleton;
 
     /** @var array Map dari standard status (kode/reason phrases)  */
@@ -166,8 +165,12 @@ final class Response implements ResponseInterface
      * RESPONSE LANGSUNG
      * */
 
-    public function withView(string $path, array $data = [], TemplateFactory $templateFactory = null, int $status = 200): ResponseInterface
-    {
+    public function withView(
+        string $path,
+        array $data = [],
+        TemplateFactory $templateFactory = null,
+        int $status = 200
+    ): ResponseInterface {
         // var_dump($templateFactory);
         $view = new Page($path, $data);
         if ($templateFactory == null) {
@@ -219,15 +222,28 @@ final class Response implements ResponseInterface
         return $response;
     }
 
+    public function withDocument($data, $status, DocumentFactory $documentFactory, $contentType = 'application/json')
+    {
+        $document = new Document($data);
+        $resultDocument = $document->result($documentFactory);
+
+        $responseBody = Stream::create($resultDocument);
+        $response = $this->make($status)
+            ->withBody($responseBody)
+            ->withHeader('Content-Type', $contentType);
+
+        return $response;
+    }
+
     public function withRedirect($location, $status = 200)
     {
         $response = $this->make($status)
             ->withHeader('Location', $location);
+
         return $response;
-        //header('Location', $location);
     }
 
-    public function withDownload($filename = '', $pathLocation)
+    public function withDownload($filename = '', $pathLocation = '')
     {
         $data = $pathLocation;
 
@@ -322,7 +338,8 @@ final class Response implements ResponseInterface
             header("Content-Transfer-Encoding: binary");
         }
         try {
-            readfile(App::getInstance()->getConfig('path_public') . $data);
+            readfile(App::getInstance()->getPath() . $data);
+//            readfile(App::getInstance()->getConfig('path_public') . $data);
         } catch (\Exception $e) {
             echo $e;
             throw new \Exception("Path Not Found");

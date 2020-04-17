@@ -4,6 +4,13 @@ use Fatkulnurk\Microframework\Routing\RouteCollector;
 
 return function (RouteCollector $r) {
     $r->addRoute('GET', '/', function ($args) {
-        echo "Hello World";
+        return Response::getInstance()
+            ->withView('index');
     });
+
+    $r->addRoute('GET', '/name/{name}', function ($args) {
+        echo "halo " . $args['name'];
+    });
+
+    $r->get('/welcome', 'App\Controllers\HomeController::welcome');
 };
