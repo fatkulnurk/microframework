@@ -103,6 +103,7 @@ class App
      * Maka, Akan menjalankan dispartcher bagian found
      *
      * @return mixed|void
+     * @throws UnknowHandlerType
      */
     public function dispatch() : void
     {
@@ -159,8 +160,7 @@ class App
                 break;
 
             default:
-                throw new UnknowHandlerType('Unknow Handler Type');
-                throw new \ErrorException('Handler Error');
+                throw new UnknowHandlerType('Unknow Handler Type / Handler Error');
         }
     }
 
