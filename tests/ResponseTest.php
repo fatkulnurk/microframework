@@ -1,60 +1,57 @@
 <?php
-require_once './vendor/autoload.php';
-
 use Fatkulnurk\Microframework\Http\Message\Response;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 
-class ResponseTest extends \PHPUnit\Framework\TestCase
+class ResponseTest extends TestCase
 {
-//    public function testDefaultConstructor()
-//    {
-//        $r = new Response();
-//        $r = Response::getInstance();
-//        $this->assertSame(200, $r->getStatusCode());
-//        $this->assertSame('1.1', $r->getProtocolVersion());
-//        $this->assertSame('OK', $r->getReasonPhrase());
-//        $this->assertSame([], $r->getHeaders());
-//        $this->assertInstanceOf(StreamInterface::class, $r->getBody());
-//        $this->assertSame('', (string) $r->getBody());
-//    }
+    public function testDefaultGetInstance()
+    {
+        $r = Response::getInstance();
+        $this->assertSame(200, $r->getStatusCode());
+        $this->assertSame('1.1', $r->getProtocolVersion());
+        $this->assertSame('OK', $r->getReasonPhrase());
+        $this->assertSame([], $r->getHeaders());
+        $this->assertInstanceOf(StreamInterface::class, $r->getBody());
+        $this->assertSame('', (string) $r->getBody());
+    }
 
-//    public function testCanConstructWithStatusCode()
-//    {
-//        $r = new Response(404);
-//        $r = Response::getInstance()->withStatus(404);
-//        $this->assertSame(404, $r->getStatusCode());
-//        $this->assertSame('Not Found', $r->getReasonPhrase());
-//    }
+    public function testCanGetInstanceWithStatusCode()
+    {
+        $r = Response::getInstance()->withStatus(404);
+        $this->assertSame(404, $r->getStatusCode());
+        $this->assertSame('Not Found', $r->getReasonPhrase());
+    }
 
-//    public function testCanConstructWithUndefinedStatusCode()
+//    public function testCanGetInstanceWithUndefinedStatusCode()
 //    {
-////        $r = new Response(999);
 //        $r = Response::getInstance()->withStatus(999);
 //        $this->assertSame(999, $r->getStatusCode());
 //        $this->assertSame('', $r->getReasonPhrase());
 //    }
 
-//    public function testCanConstructWithStatusCodeAndEmptyReason()
-//    {
-//        $r = new Response(404, [], null, '1.1', '');
-//        $this->assertSame(404, $r->getStatusCode());
-//        $this->assertSame('', $r->getReasonPhrase());
-//    }
+    public function testCanGetInstanceWithStatusCodeAndEmptyReason()
+    {
+        $r = Response::getInstance()->make(404, [], '', '1.1', '');
+        $this->assertSame(404, $r->getStatusCode());
+        $this->assertSame('', $r->getReasonPhrase());
+    }
 
-//    public function testConstructorDoesNotReadStreamBody()
-//    {
-//        $body = $this->getMockBuilder(StreamInterface::class)->getMock();
-//        $body->expects($this->never())
-//            ->method('__toString');
-//
-////        $r = new Response(200, [], $body);
-//        $r = Response::getInstance()->withStatus(200)->withBody($body);
-//        $this->assertSame($body, $r->getBody());
-//    }
+    public function testGetInstanceDoesNotReadStreamBody()
+    {
+        try {
+            $body = $this->getMockBuilder(StreamInterface::class)->getMock();
+        } catch (ReflectionException $e) {
+        }
+        $body->expects($this->never())
+            ->method('__toString');
+
+        $r = Response::getInstance()->make(200, [], $body);
+        $this->assertSame($body, $r->getBody());
+    }
 
     public function testStatusCanBeNumericString()
     {
-//        $r = new Response('404');
         $r = Response::getInstance()->withStatus(404);
         $r2 = $r->withStatus('201');
         $this->assertSame(404, $r->getStatusCode());
@@ -63,7 +60,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertSame('Created', $r2->getReasonPhrase());
     }
 
-//    public function testCanConstructWithHeaders()
+//    public function testCanGetInstanceWithHeaders()
 //    {
 //        $r = new Response(200, ['Foo' => 'Bar']);
 //        $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
@@ -71,7 +68,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 //        $this->assertSame(['Bar'], $r->getHeader('Foo'));
 //    }
 
-//    public function testCanConstructWithHeadersAsArray()
+//    public function testCanGetInstanceWithHeadersAsArray()
 //    {
 ////        $r = new Response(200, [
 ////            'Foo' => ['baz', 'bar'],
@@ -91,25 +88,27 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 //        $this->assertSame('baz', (string) $r->getBody());
 //    }
 
-    public function testNullBody()
+    public function testEmptyBody()
     {
-//        $r = new Response(200, [], null);
-        $r = Response::getInstance()->withStatus(200)->withBody(null);
+        $stream = \Fatkulnurk\Microframework\Http\Message\Stream::create('');
+        $r = Response::getInstance()
+            ->withStatus(200)
+            ->withBody($stream);
         $this->assertInstanceOf(StreamInterface::class, $r->getBody());
         $this->assertSame('', (string) $r->getBody());
     }
 
     public function testFalseyBody()
     {
-//        $r = new Response(200, [], '0');
-        $r = Response::getInstance()->withStatus(200)->withBody('0');
+        $stream = \Fatkulnurk\Microframework\Http\Message\Stream::create('0');
+        $r = Response::getInstance()->withStatus(200)->withBody($stream);
         $this->assertInstanceOf(StreamInterface::class, $r->getBody());
         $this->assertSame('0', (string) $r->getBody());
     }
 
 //    public function testCanConstructWithReason()
 //    {
-//        $r = new Response(200, [], null, '1.1', 'bar');
+//        $r = Response::getInstance()->make(200, [], null, '1.1', 'bar');
 //        $this->assertSame('bar', $r->getReasonPhrase());
 //
 //        $r = new Response(200, [], null, '1.1', '0');
@@ -118,13 +117,12 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 //
 //    public function testCanConstructWithProtocolVersion()
 //    {
-//        $r = new Response(200, [], null, '1000');
+//        $r = Response::getInstance()->make(200, [], null, '1000');
 //        $this->assertSame('1000', $r->getProtocolVersion());
 //    }
 
     public function testWithStatusCodeAndNoReason()
     {
-//        $r = (new Response())->withStatus(201);
         $r = Response::getInstance()->withStatus(201);
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('Created', $r->getReasonPhrase());
@@ -132,12 +130,10 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testWithStatusCodeAndReason()
     {
-//        $r = (new Response())->withStatus(201, 'Foo');
         $r = Response::getInstance()->withStatus(201, 'Foo');
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('Foo', $r->getReasonPhrase());
 
-//        $r = (new Response())->withStatus(201, '0');
         $r = Response::getInstance()->withStatus(201, '0');
         $this->assertSame(201, $r->getStatusCode());
         $this->assertSame('0', $r->getReasonPhrase(), 'Falsey reason works');
@@ -145,14 +141,12 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testWithProtocolVersion()
     {
-//        $r = (new Response())->withProtocolVersion('1000');
         $r = Response::getInstance()->withProtocolVersion('1000');
         $this->assertSame('1000', $r->getProtocolVersion());
     }
 
     public function testSameInstanceWhenSameProtocol()
     {
-//        $r = new Response();
         $r = Response::getInstance();
         $this->assertSame($r, $r->withProtocolVersion('1.1'));
     }
@@ -160,7 +154,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     public function testWithBody()
     {
         $b = (new \Nyholm\Psr7\Factory\Psr17Factory())->createStream('0');
-//        $r = (new Response())->withBody($b);
         $r = Response::getInstance()->withBody($b);
         $this->assertInstanceOf(StreamInterface::class, $r->getBody());
         $this->assertSame('0', (string) $r->getBody());
@@ -168,7 +161,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testSameInstanceWhenSameBody()
     {
-//        $r = new Response();
         $r = Response::getInstance();
         $b = $r->getBody();
         $this->assertSame($r, $r->withBody($b));
@@ -176,8 +168,8 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testWithHeader()
     {
-//        $r = new Response(200, ['Foo' => 'Bar']);
-        $r = Response::getInstance()->withStatus(200)
+        $r = Response::getInstance()
+            ->withStatus(200)
             ->withHeader('Foo', 'Bar');
         $r2 = $r->withHeader('baZ', 'Bam');
         $this->assertSame(['Foo' => ['Bar']], $r->getHeaders());
@@ -188,7 +180,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testWithHeaderAsArray()
     {
-//        $r = new Response(200, ['Foo' => 'Bar']);
         $r = Response::getInstance()->withStatus(200)
             ->withHeader('Foo', 'Bar');
         $r2 = $r->withHeader('baZ', ['Bam', 'Bar']);
@@ -200,7 +191,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testWithHeaderReplacesDifferentCase()
     {
-//        $r = new Response(200, ['Foo' => 'Bar']);
         $r = Response::getInstance()->withStatus(200)
             ->withHeader('Foo', 'Bar');
         $r2 = $r->withHeader('foO', 'Bam');
@@ -212,7 +202,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testWithAddedHeader()
     {
-//        $r = new Response(200, ['Foo' => 'Bar']);
         $r = Response::getInstance()->withStatus(200)
             ->withHeader('Foo', 'Bar');
         $r2 = $r->withAddedHeader('foO', 'Baz');
@@ -224,7 +213,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testWithAddedHeaderAsArray()
     {
-//        $r = new Response(200, ['Foo' => 'Bar']);
         $r = Response::getInstance()->withStatus(200)
             ->withHeader('Foo', 'Bar');
         $r2 = $r->withAddedHeader('foO', ['Baz', 'Bam']);
@@ -236,7 +224,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testWithAddedHeaderThatDoesNotExist()
     {
-//        $r = new Response(200, ['Foo' => 'Bar']);
         $r = Response::getInstance()->withStatus(200)
             ->withHeader('Foo', 'Bar');
         $r2 = $r->withAddedHeader('nEw', 'Baz');
@@ -248,7 +235,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testWithoutHeaderThatExists()
     {
-//        $r = new Response(200, ['Foo' => 'Bar', 'Baz' => 'Bam']);
         $r = Response::getInstance()->withStatus(200)
             ->withHeader('Foo', 'Bar')
             ->withHeader('Baz', 'Bam');
@@ -261,7 +247,6 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testWithoutHeaderThatDoesNotExist()
     {
-//        $r = new Response(200, ['Baz' => 'Bam']);
         $r = Response::getInstance()->withStatus(200)->withHeader('Baz', 'Bam');
         $r2 = $r->withoutHeader('foO');
         $this->assertSame($r, $r2);
@@ -271,19 +256,12 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
 
     public function testSameInstanceWhenRemovingMissingHeader()
     {
-//        $r = new Response();
         $r = Response::getInstance();
         $this->assertSame($r, $r->withoutHeader('foo'));
     }
 
     public function trimmedHeaderValues()
     {
-//        return [
-//            [new Response(200, ['OWS' => " \t \tFoo\t \t "])],
-//            [(new Response())->withHeader('OWS', " \t \tFoo\t \t ")],
-//            [(new Response())->withAddedHeader('OWS', " \t \tFoo\t \t ")],
-//        ];
-
         return [
             [Response::getInstance()->withHeader('OWS', " \t \tFoo\t \t ")],
             [Response::getInstance()->withHeader('OWS', " \t \tFoo\t \t ")],

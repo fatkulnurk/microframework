@@ -1,13 +1,18 @@
 <?php
 namespace Tests\Microframework;
 
+use Fatkulnurk\Microframework\Http\Message\ServerRequest;
+use Fatkulnurk\Microframework\Http\Message\UploadedFile;
 use PHPUnit\Framework\TestCase;
 
 class ServerRequestTest extends TestCase
 {
+
     public function testUploadedFiles()
     {
-        $request1 = new ServerRequest('GET', '/');
+//        $request1 = new ServerRequest('GET', '/');
+        $request1 = ServerRequest::getInstanceMakeGlobalEmpty()
+            ->make('GET', '/');
 
         $files = [
             'file' => new UploadedFile('test', 123, UPLOAD_ERR_OK),
@@ -24,13 +29,15 @@ class ServerRequestTest extends TestCase
     {
         $params = ['name' => 'value'];
 
-        $request = new ServerRequest('GET', '/', [], null, '1.1', $params);
+        $request = ServerRequest::getInstanceMakeGlobalEmpty()
+            ->make('GET', '/', [], null, '1.1', $params);
         $this->assertSame($params, $request->getServerParams());
     }
 
     public function testCookieParams()
     {
-        $request1 = new ServerRequest('GET', '/');
+        $request1 = ServerRequest::getInstanceMakeGlobalEmpty()
+            ->make('GET', '/');
 
         $params = ['name' => 'value'];
 
@@ -43,7 +50,8 @@ class ServerRequestTest extends TestCase
 
     public function testQueryParams()
     {
-        $request1 = new ServerRequest('GET', '/');
+        $request1 = ServerRequest::getInstanceMakeGlobalEmpty()
+            ->make('GET', '/');
 
         $params = ['name' => 'value'];
 
@@ -56,7 +64,8 @@ class ServerRequestTest extends TestCase
 
     public function testParsedBody()
     {
-        $request1 = new ServerRequest('GET', '/');
+        $request1 = ServerRequest::getInstanceMakeGlobalEmpty()
+            ->make('GET', '/');
 
         $params = ['name' => 'value'];
 
@@ -69,7 +78,8 @@ class ServerRequestTest extends TestCase
 
     public function testAttributes()
     {
-        $request1 = new ServerRequest('GET', '/');
+        $request1 = ServerRequest::getInstanceMakeGlobalEmpty()
+            ->make('GET', '/');
 
         $request2 = $request1->withAttribute('name', 'value');
         $request3 = $request2->withAttribute('other', 'otherValue');
@@ -97,7 +107,8 @@ class ServerRequestTest extends TestCase
 
     public function testNullAttribute()
     {
-        $request = (new ServerRequest('GET', '/'))->withAttribute('name', null);
+        $request = (ServerRequest::getInstanceMakeGlobalEmpty()
+            ->make('GET', '/'))->withAttribute('name', null);
 
         $this->assertSame(['name' => null], $request->getAttributes());
         $this->assertNull($request->getAttribute('name', 'different-default'));
