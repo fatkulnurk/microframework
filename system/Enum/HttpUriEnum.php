@@ -6,5 +6,4 @@ use MyCLabs\Enum\Enum;
 
 class HttpUriEnum extends Enum
 {
-
 }
