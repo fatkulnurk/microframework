@@ -14,6 +14,10 @@ class Request implements RequestInterface
     use RequestTrait;
     use Singleton;
 
+    private function __construct()
+    {
+    }
+
     /**
      * @param string $method HTTP method
      * @param string|UriInterface $uri URI
@@ -42,5 +46,19 @@ class Request implements RequestInterface
         }
 
         return $this;
+    }
+
+    public static function getInstanceRequestEmpty()
+    {
+        self::$instance = new static();
+
+        return self::$instance;
+    }
+
+    public function flushData()
+    {
+        self::$instance = new static();
+
+        return self::$instance;
     }
 }

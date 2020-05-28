@@ -65,30 +65,49 @@ final class Uri implements UriInterface
 
     public function __construct(string $uri = '')
     {
-        if ($uri !== '') {
-            /*
-             * parse_url Menghasilkan array dengan key
-             * scheme - e.g. http
-             * host, port, user, pass, path, query, fragment
-            */
-            $parse_url = parse_url($uri);
 
-            if ($parse_url === false) {
+        if ('' !== $uri) {
+            if (false === $parts = \parse_url($uri)) {
                 throw new \InvalidArgumentException("Unable to parse URI: $uri");
             }
 
-            $this->scheme   = isset($parse_url['scheme']) ? strtolower($parse_url['scheme']) : '';
-            $this->host     = isset($parse_url['host']) ? strtolower($parse_url['host']) : '';
-            $this->port     = isset($parse_url['port']) ? $this->filterPort($parse_url['port']) : null;
-            $this->userInfo = $parse_url['user'] ?? '';
-            $this->path     = isset($parse_url['path']) ? $this->filterPath($parse_url['path']) : '';
-            $this->query    = isset($parse_url['query']) ? $this->filterQueryAndFragment($parse_url['query']) : '';
-            $this->fragment = isset($parse_url['fragment']) ?
-                $this->filterQueryAndFragment($parse_url['fragment']) : '';
-            if (isset($parse_url['pass'])) {
-                $this->userInfo .= ':' . $parse_url['pass'];
+            // Apply parse_url parts to a URI.
+            $this->scheme = isset($parts['scheme']) ? \strtolower($parts['scheme']) : '';
+            $this->userInfo = $parts['user'] ?? '';
+            $this->host = isset($parts['host']) ? \strtolower($parts['host']) : '';
+            $this->port = isset($parts['port']) ? $this->filterPort($parts['port']) : null;
+            $this->path = isset($parts['path']) ? $this->filterPath($parts['path']) : '';
+            $this->query = isset($parts['query']) ? $this->filterQueryAndFragment($parts['query']) : '';
+            $this->fragment = isset($parts['fragment']) ? $this->filterQueryAndFragment($parts['fragment']) : '';
+            if (isset($parts['pass'])) {
+                $this->userInfo .= ':' . $parts['pass'];
             }
         }
+
+//        if ($uri !== '') {
+//            /*
+//             * parse_url Menghasilkan array dengan key
+//             * scheme - e.g. http
+//             * host, port, user, pass, path, query, fragment
+//            */
+//            $parse_url = parse_url($uri);
+//
+//            if ($parse_url === false) {
+//                throw new \InvalidArgumentException("Unable to parse URI: $uri");
+//            }
+//
+//            $this->scheme   = isset($parse_url['scheme']) ? strtolower($parse_url['scheme']) : '';
+//            $this->host     = isset($parse_url['host']) ? strtolower($parse_url['host']) : '';
+//            $this->port     = isset($parse_url['port']) ? $this->filterPort($parse_url['port']) : null;
+//            $this->userInfo = $parse_url['user'] ?? '';
+//            $this->path     = isset($parse_url['path']) ? $this->filterPath($parse_url['path']) : '';
+//            $this->query    = isset($parse_url['query']) ? $this->filterQueryAndFragment($parse_url['query']) : '';
+//            $this->fragment = isset($parse_url['fragment']) ?
+//                $this->filterQueryAndFragment($parse_url['fragment']) : '';
+//            if (isset($parse_url['pass'])) {
+//                $this->userInfo .= ':' . $parse_url['pass'];
+//            }
+//        }
     }
 
 
@@ -142,7 +161,7 @@ final class Uri implements UriInterface
     /**
      * @return int
      */
-    public function getPort(): int
+    public function getPort(): ?int
     {
         return $this->port;
     }
