@@ -21,22 +21,23 @@ use function trim;
  * */
 final class Uri implements UriInterface
 {
-    private const
     /**
      * @var array
      */
-    SCHEMES = [
+    private const SCHEMES = [
         'http' => 80,
         'https' => 443
-    ],
+    ];
+
     /**
      * @var string
      */
-    CHAR_UNRESERVED = 'a-zA-Z0-9_\-\.~',
+    private const CHAR_UNRESERVED = 'a-zA-Z0-9_\-\.~';
+
     /**
      * @var string
      */
-    CHAR_SUB_DELIMS = '!\$&\'\(\)\*\+,;=';
+    private const CHAR_SUB_DELIMS = '!\$&\'\(\)\*\+,;=';
 
     /**
      * Untuk menyimpan scheme
