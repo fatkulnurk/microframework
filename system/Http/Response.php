@@ -320,7 +320,7 @@ final class Response implements ResponseInterface
         if (!isset($mime_types[$extension])) {
             $mime = 'application/octet-stream';
         } else {
-            $mime = (is_array($mime_types[$extension]) ) ? $mime_types[$extension][0] : $mime_types[$extension];
+            $mime = (is_array($mime_types[$extension])) ? $mime_types[$extension][0] : $mime_types[$extension];
         }
 
         if (strstr($_SERVER['HTTP_USER_AGENT'], "MSIE")) {
