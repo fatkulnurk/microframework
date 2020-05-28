@@ -33,6 +33,5 @@ class TwigRenderer implements TemplateRenderer
             }
         }
         throw new TemplateEngineNotFoundException('Twig not installed');
-
     }
 }
