@@ -480,5 +480,4 @@ final class Uri implements UriInterface
             $str
         );
     }
-
 }
