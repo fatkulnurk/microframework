@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Mifa\Core;
+namespace Fatkulnurk\Microframework\Core;
 
 //use Noodlehaus\Config;
 //use Noodlehaus\Parser\Json;
@@ -13,6 +13,10 @@ class Config
 {
     use Singleton;
     private $patConfig;
+
+    private function __construct()
+    {
+    }
 
     public function read()
     {
