@@ -346,15 +346,18 @@ final class Uri implements UriInterface
         }
 
         if ($path !== '') {
-            if ($path[0] !== '') {
+            if ($path[0] !== '/') {
                 if ($authority !== '') {
                     // jika path tidak menentu & authority ditemukan
                     // maka path harus diawali tanda slash "/"
                     $path = '/' . $path;
                 }
             } elseif (isset($path[1]) && $path[1] === '/') {
-                if ($authority =='') {
-                    $path = '/' . trim($path, '/');
+                if ($authority == '') {
+//                    $path = '/' . trim($path, '/');
+                    // If the path is starting with more than one "/" and no authority is present, the
+                    // starting slashes MUST be reduced to one.
+                    $path = '/' . \ltrim($path, '/');
                 }
             }
 

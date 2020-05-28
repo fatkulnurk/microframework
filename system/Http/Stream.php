@@ -121,6 +121,7 @@ final class Stream implements StreamInterface
             if (is_resource($this->stream)) {
                 fclose($this->stream);
             }
+            $this->detach();
         }
     }
 
@@ -152,7 +153,7 @@ final class Stream implements StreamInterface
      */
     public function getSize(): ?int
     {
-        if ($this->stream !== null) {
+        if ($this->size !== null) {
             return $this->size;
         }
 
