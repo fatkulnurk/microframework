@@ -93,6 +93,7 @@ final class Response implements ResponseInterface
 
     private function __construct()
     {
+        $this->make();
     }
 
     /**

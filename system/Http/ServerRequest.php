@@ -34,9 +34,20 @@ final class ServerRequest implements ServerRequestInterface
     /** @var UploadedFileInterface[] */
     private $uploadedFiles = [];
 
-    private function __construct()
+    private function __construct($fromGlobal = true)
     {
-        $this->fromGlobal();
+        if ($fromGlobal) {
+            $this->fromGlobal();
+        }
+    }
+
+    public static function getInstanceMakeGlobalEmpty()
+    {
+        if (self::$instance == null) {
+            self::$instance = new static(false);
+        }
+
+        return self::$instance;
     }
 
     /**
