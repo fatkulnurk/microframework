@@ -78,5 +78,4 @@ if (! function_exists('FastRoute\simpleDispatcher')) {
 
         return new $options['dispatcher']($dispatchData);
     }
-
 }

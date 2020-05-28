@@ -7,7 +7,6 @@ use Psr\Http\Message\StreamInterface;
 
 class RequestTest extends TestCase
 {
-
     public function testRequestUriMayBeString()
     {
         $r = new Request('GET', '/');

@@ -8,7 +8,6 @@ class UriTest extends TestCase
 {
     public function testUriParse()
     {
-
         $uri = new Uri('https://user:pass@example.com:8080/path/123?q=abc#test');
 
         $this->assertSame('https', $uri->getScheme());

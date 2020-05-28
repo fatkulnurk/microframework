@@ -6,7 +6,6 @@ use Psr\Http\Message\StreamInterface;
 
 class ResponseTest
 {
-
     public function testDefaultConstructor()
     {
         $r = new Response();

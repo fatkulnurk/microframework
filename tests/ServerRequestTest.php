@@ -5,7 +5,6 @@ use PHPUnit\Framework\TestCase;
 
 class ServerRequestTest extends TestCase
 {
-
     public function testUploadedFiles()
     {
         $request1 = new ServerRequest('GET', '/');
