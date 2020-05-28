@@ -10,5 +10,4 @@ interface TemplateFactory
     public function createPageTemplate(string $path): PageTemplate;
 
     public function getRenderer(): TemplateRenderer;
-
 }

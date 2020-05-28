@@ -1,8 +1,4 @@
 <?php
-/*
- * class ini tidak digunakan
- * tapi tetap dibiarkan sebagai backup
- * */
 declare(strict_types=1);
 
 namespace Fatkulnurk\Microframework\Http\Message;
@@ -21,7 +17,7 @@ use function sprintf;
 use const PHP_SAPI;
 use const UPLOAD_ERR_OK;
 
-final class UploadFile implements UploadedFileInterface
+final class UploadedFile implements UploadedFileInterface
 {
     /** @var array */
     private const ERRORS = [
