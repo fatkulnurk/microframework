@@ -115,7 +115,7 @@ class StreamTest extends TestCase
                 $fn($stream);
                 $this->fail();
             } catch (\Exception $e) {
-                // Suppress the exception
+                // Jangan dikasih die dump
             }
         };
 
@@ -159,9 +159,9 @@ class StreamTest extends TestCase
 
     public function testUnseekableStreamWrapper()
     {
-        stream_wrapper_register('nyholm-psr7-test', TestStreamWrapper::class);
-        $handle = fopen('nyholm-psr7-test://', 'r');
-        stream_wrapper_unregister('nyholm-psr7-test');
+        stream_wrapper_register('psr7-test', TestStreamWrapper::class);
+        $handle = fopen('psr7-test://', 'r');
+        stream_wrapper_unregister('psr7-test');
 
         $stream = Stream::create($handle);
         $this->assertFalse($stream->isSeekable());

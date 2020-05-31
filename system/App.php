@@ -51,6 +51,10 @@ class App
 
     protected $config = [];
 
+    private function __construct()
+    {
+    }
+
     /**
      * Method ini untuk interaksi dengan routing
      * Pada bagian ini terdapat parser, data degerator, dispatcher dan routecollector
@@ -182,6 +186,7 @@ class App
     public function setConfig(array $config)
     {
         $this->config = $config;
+        return $this;
     }
 
     public function getConfig($key)
