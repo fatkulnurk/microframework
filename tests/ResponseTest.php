@@ -1,5 +1,6 @@
 <?php
 use Fatkulnurk\Microframework\Http\Message\Response;
+use Fatkulnurk\Microframework\Http\Message\Stream;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\StreamInterface;
 
@@ -16,6 +17,7 @@ class ResponseTest extends TestCase
         $this->assertSame('', (string) $r->getBody());
     }
 
+
     public function testCanGetInstanceWithStatusCode()
     {
         $r = Response::getInstance()->withStatus(404);
@@ -23,18 +25,42 @@ class ResponseTest extends TestCase
         $this->assertSame('Not Found', $r->getReasonPhrase());
     }
 
-//    public function testCanGetInstanceWithUndefinedStatusCode()
-//    {
-//        $r = Response::getInstance()->withStatus(999);
-//        $this->assertSame(999, $r->getStatusCode());
-//        $this->assertSame('', $r->getReasonPhrase());
-//    }
+    public function testCanGetInstanceWithUndefinedStatusCode()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $r = Response::getInstance()->withStatus(999);
+        $this->assertSame(999, $r->getStatusCode());
+        $this->assertSame('', $r->getReasonPhrase());
+    }
+
+    public function testCanGetInstanceWithProtocolVersion()
+    {
+        $r = Response::getInstance()->make(200, [], null, '1000');
+        $this->assertSame('1000', $r->getProtocolVersion());
+    }
+
+    public function testCanGetInstanceWithReason()
+    {
+        $r = Response::getInstance()->make(200, [], null, '1.1', 'bar');
+        $this->assertSame('bar', $r->getReasonPhrase());
+
+        $r = Response::getInstance()->make(200, [], null, '1.1', '0');
+        $this->assertSame('0', $r->getReasonPhrase(), 'Falsey reason works');
+    }
 
     public function testCanGetInstanceWithStatusCodeAndEmptyReason()
     {
         $r = Response::getInstance()->make(404, [], '', '1.1', '');
         $this->assertSame(404, $r->getStatusCode());
         $this->assertSame('', $r->getReasonPhrase());
+    }
+
+
+    public function testCanGetInstanceWithBody()
+    {
+        $r = Response::getInstance()->withBody(Stream::create('baz'));
+        $this->assertInstanceOf(StreamInterface::class, $r->getBody());
+        $this->assertSame('baz', (string) $r->getBody());
     }
 
     public function testGetInstanceDoesNotReadStreamBody()
@@ -80,17 +106,9 @@ class ResponseTest extends TestCase
 //        $this->assertSame(['baz', 'bar'], $r->getHeader('Foo'));
 //    }
 
-//    public function testCanConstructWithBody()
-//    {
-////        $r = new Response(200, [], 'baz');
-//        $r = Response::getInstance()->withBody('baz');
-//        $this->assertInstanceOf(StreamInterface::class, $r->getBody());
-//        $this->assertSame('baz', (string) $r->getBody());
-//    }
-
     public function testEmptyBody()
     {
-        $stream = \Fatkulnurk\Microframework\Http\Message\Stream::create('');
+        $stream = Stream::create('');
         $r = Response::getInstance()
             ->withStatus(200)
             ->withBody($stream);
@@ -100,26 +118,11 @@ class ResponseTest extends TestCase
 
     public function testFalseyBody()
     {
-        $stream = \Fatkulnurk\Microframework\Http\Message\Stream::create('0');
+        $stream = Stream::create('0');
         $r = Response::getInstance()->withStatus(200)->withBody($stream);
         $this->assertInstanceOf(StreamInterface::class, $r->getBody());
         $this->assertSame('0', (string) $r->getBody());
     }
-
-//    public function testCanConstructWithReason()
-//    {
-//        $r = Response::getInstance()->make(200, [], null, '1.1', 'bar');
-//        $this->assertSame('bar', $r->getReasonPhrase());
-//
-//        $r = new Response(200, [], null, '1.1', '0');
-//        $this->assertSame('0', $r->getReasonPhrase(), 'Falsey reason works');
-//    }
-//
-//    public function testCanConstructWithProtocolVersion()
-//    {
-//        $r = Response::getInstance()->make(200, [], null, '1000');
-//        $this->assertSame('1000', $r->getProtocolVersion());
-//    }
 
     public function testWithStatusCodeAndNoReason()
     {
@@ -153,8 +156,7 @@ class ResponseTest extends TestCase
 
     public function testWithBody()
     {
-        $b = (new \Nyholm\Psr7\Factory\Psr17Factory())->createStream('0');
-        $r = Response::getInstance()->withBody($b);
+        $r = Response::getInstance()->withBody(Stream::create('0'));
         $this->assertInstanceOf(StreamInterface::class, $r->getBody());
         $this->assertSame('0', (string) $r->getBody());
     }
@@ -277,5 +279,78 @@ class ResponseTest extends TestCase
         $this->assertSame(['OWS' => ['Foo']], $r->getHeaders());
         $this->assertSame('Foo', $r->getHeaderLine('OWS'));
         $this->assertSame(['Foo'], $r->getHeader('OWS'));
+    }
+
+    public function testResponseReturnView()
+    {
+        $expected = <<<EOD
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Welcome</title>
+</head>
+<body>
+<div><h1>Microframework</h1>
+<h2>Welcome To Microframework</h2>
+
+</div>
+</body>
+</html>
+EOD;
+
+        $this->expectException(\Exception::class);
+        $this->expectException(\Twig\Error\LoaderError::class);
+
+        $response = Response::getInstance()
+            ->withView('', [
+                'title' => 'Microframework',
+                'message' => 'Welcome To Microframework',
+            ]);
+
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $response);
+        $this->assertEquals($expected, (string) $response->getBody());
+    }
+
+    public function testResponseReturnJson()
+    {
+        $expected = <<<EOD
+{"message":"hello"}
+EOD;
+        try {
+            $response = Response::getInstance()
+                ->withJson(['message' => 'hello']);
+        } catch (Exception $e) {
+        }
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $response);
+        $this->assertJsonStringEqualsJsonString($expected, (string) $response->getBody());
+    }
+
+    public function testResponseReturnXml()
+    {
+        $expected = <<<EOD
+<?xml version="1.0"?>
+<root><message>hello</message></root>
+EOD;
+
+        try {
+            $response = Response::getInstance()
+                ->withXml(['message' => 'hello']);
+        } catch (Exception $e) {
+        }
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $response);
+        $this->assertXmlStringEqualsXmlString($expected, (string) $response->getBody());
+        $this->assertXmlStringEqualsXmlString($expected, (string) $response->getBody());
+    }
+
+    public function testResponseReturnRedirect()
+    {
+        try {
+            $response = Response::getInstance()
+                ->withRedirect('http://google.com');
+        } catch (Exception $e) {
+        }
+        $this->assertInstanceOf(\Psr\Http\Message\ResponseInterface::class, $response);
+        $this->assertEquals(true, $response->hasHeader('location'));
     }
 }

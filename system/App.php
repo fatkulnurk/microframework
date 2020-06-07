@@ -214,7 +214,10 @@ class App
     {
         $instance = new $class();
 
-        $reflectionMethod = new ReflectionMethod($class, $method);
+        try {
+            $reflectionMethod = new ReflectionMethod($class, $method);
+        } catch (\ReflectionException $e) {
+        }
         return $reflectionMethod->invoke($instance, $args);
     }
 }

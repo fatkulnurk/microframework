@@ -29,7 +29,7 @@ class RequestTest extends TestCase
         Request::getInstance()->make('GET', '///');
     }
 
-    public function testCanConstructWithBody()
+    public function testCanGetInstanceWithBody()
     {
         $r = Request::getInstance()->make('GET', '/', [], 'baz');
         $this->assertInstanceOf(StreamInterface::class, $r->getBody());
@@ -50,7 +50,7 @@ class RequestTest extends TestCase
         $this->assertSame('0', (string) $r->getBody());
     }
 
-    public function testConstructorDoesNotReadStreamBody()
+    public function testGetInstanceDoesNotReadStreamBody()
     {
         $body = $this->getMockBuilder(StreamInterface::class)->getMock();
         $body->expects($this->never())
